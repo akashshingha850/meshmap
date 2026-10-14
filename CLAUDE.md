@@ -2,7 +2,13 @@
 
 ## Project
 
-MeshMap: mesh-fed forward-feed photogrammetry with a UAV swarm (BATMAN-adv mesh, path planning, swarm photogrammetry). Outline in [README.md](README.md) and [docs/](docs/).
+MeshMap: mesh-fed forward-feed photogrammetry with a UAV swarm (BATMAN-adv mesh, path planning, swarm photogrammetry). See [docs/README.md](docs/README.md).
+
+## Docs layout
+
+- All project documentation lives in `docs/`, one subfolder per pipeline (`01-mesh-networking/`, `02-path-planning/`, `03-forward-feed-photogrammetry/`, `04-cross-pipeline/`).
+- Each subfolder has `README.md` (index), `academic.md` (state of the art, gaps, RQs, evaluation, contributions, venues) and `technical.md` (architecture, hardware, software, configs, procedures, technical todo). Keep both academic and technical content up to date when changing a pipeline.
+- Cite sources inline with links; mark anything not verified as *verify* / unverified.
 
 ## Git
 
