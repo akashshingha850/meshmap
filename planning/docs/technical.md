@@ -1,6 +1,6 @@
 # P2 Path planning for photogrammetry — Technical
 
-[← P2 index](README.md) · [Academic](academic.md)
+[← Main doc](../../README.md) · [P2 overview](../README.md) · [Academic](academic.md)
 
 How missions are computed, simulated and flown.
 

@@ -1,48 +1,54 @@
 # Contributing
 
-Three people, three pipelines, one repo. These rules keep us out of each other's way.
+Three people, three pipelines, one repo. The structure is built so that most of the time you only touch your own folder, and the few places where we depend on each other are explicit.
 
 ## Ownership
 
-| Area | Owner | Who must review |
+| Area | Owner | Review needed from |
 | --- | --- | --- |
-| `mesh/`, `docs/01-mesh-networking/` | P1 owner | P1 owner (others optional) |
-| `planning/`, `docs/02-path-planning/` | P2 owner | P2 owner (others optional) |
-| `photogrammetry/`, `docs/03-forward-feed-photogrammetry/` | P3 owner | P3 owner (others optional) |
-| `common/`, `docs/04-cross-pipeline/`, `analysis/` | shared | every pipeline the change affects |
-| `README.md`, `CONTRIBUTING.md`, `.github/` | shared | at least one other person |
+| `mesh/` | mesh owner | mesh owner |
+| `planning/` | planning owner | planning owner |
+| `photogrammetry/` | photogrammetry owner | photogrammetry owner |
+| `integration/interfaces/<file>.md` | that interface's producer | producer **and** every consumer listed in the file |
+| `integration/decisions/`, `integration/docs/` | all three | every pipeline the change affects |
+| `README.md`, `CONTRIBUTING.md`, `.github/` | all three | at least one other person |
 
-Owners are listed in the [README](README.md#pipelines-and-owners) and enforced through [.github/CODEOWNERS](.github/CODEOWNERS).
+Owners are listed in the [README](README.md#who-owns-what). Once GitHub usernames are filled in, [.github/CODEOWNERS](.github/CODEOWNERS) requests the right reviewers automatically.
 
 ## Branches and pull requests
 
-- `main` is always in a working state. Don't push broken code to it.
-- Branch names start with the pipeline: `p1/zenoh-qos`, `p2/ortools-mtsp`, `p3/quality-ladder`, `common/run-schema`, `docs/...`.
-- Open a pull request for any code change and any change to shared areas. Small typo or wording fixes in your own docs folder can go straight to `main`.
-- Keep PRs small and focused on one pipeline where possible. If a change spans pipelines, say so in the PR description and tag both owners.
+- `main` should always be in a working state.
+- Name branches after the folder: `mesh/zenoh-qos`, `planning/ortools-mtsp`, `photogrammetry/quality-ladder`, `integration/run-metadata-v0.2`.
+- Use a pull request for code and for anything in `integration/`. Text-only edits inside your own folder can go straight to `main`.
+- Keep PRs to one folder where possible. If a change spans pipelines, split it, or tag every affected owner.
 
-## Changing an interface
+## Interfaces
 
-The contracts between pipelines live in [docs/04-cross-pipeline/interfaces.md](docs/04-cross-pipeline/interfaces.md) and, once they exist, as schemas in [common/](common/).
+The contracts live in [integration/interfaces/](integration/interfaces/README.md), one file per hand-off. The producer maintains the file; consumers must approve changes. Bump the version, add a change-log line, and keep the old version working until every consumer has switched. Details are in the interfaces README.
 
-1. Open an issue or PR describing the change and why.
-2. Bump the interface version in `interfaces.md`.
-3. Get approval from the producer **and** every consumer of that interface.
-4. Update the producer and consumers in the same PR, or keep the old version working until they are updated.
+## Decisions
+
+When a choice affects another pipeline or had real alternatives, write a short [decision record](integration/decisions/README.md) (`YYYY-MM-DD-title.md` from the template). Accepted records are never rewritten; a new record supersedes an old one.
+
+## Status and sync
+
+- Each owner keeps the **Status** block (now / next / blocked on) at the top of their pipeline README current, at least before the weekly sync.
+- "Blocked on" is how we ask each other for things. If you're blocked on another pipeline, link the interface or issue.
+- Use GitHub issues for tasks that involve more than one person; label them with the pipeline name.
 
 ## Docs
 
-- When you change how your pipeline works, update both `academic.md` and `technical.md` in your docs folder if they are affected.
+- Research content goes in your `docs/academic.md`, engineering content in `docs/technical.md`. Update both when your pipeline changes.
 - Tick items in the "Technical todo" list of your `technical.md` as they are done.
 - Cite sources inline with links. Mark anything not yet verified as *verify*.
 
 ## Data
 
-- Flight and test data go under `runs/<date>/<run-id>/` (layout in [cross-pipeline technical](docs/04-cross-pipeline/technical.md#run-and-data-layout)). `runs/` is git-ignored; store it on the shared drive.
-- Every run has a `run.yaml` with its factor settings. All timestamps are UTC from GNSS-disciplined clocks.
+- Flight and test data go under `runs/<date>/<run-id>/` (layout in [integration technical notes](integration/docs/technical.md#run-and-data-layout)). `runs/` is git-ignored; store it on the shared drive.
+- Every run has a [`run.yaml`](integration/interfaces/run-metadata.md). All timestamps are UTC from GNSS-disciplined clocks.
 - Never commit full-resolution images, ULogs or pcaps. Small sample files for tests go in `<pipeline>/tests/data/`.
 
 ## Commits
 
-- Present-tense summary, optionally prefixed with the area: `p1: add station-dump logger`, `common: add run.yaml schema`.
+- Present-tense summary, prefixed with the folder: `mesh: add station-dump logger`, `integration: bump image record to 0.2`.
 - Don't add AI tools as co-authors.

@@ -1,12 +1,16 @@
-# Replace the placeholders with GitHub usernames, then uncomment.
-# Later lines take precedence over earlier ones.
+# Replace @mesh-owner, @planning-owner and @photogrammetry-owner with GitHub
+# usernames, then uncomment. Later lines take precedence over earlier ones.
 
-# *                     @p1-owner @p2-owner @p3-owner
-# /mesh/                @p1-owner
-# /docs/01-mesh-networking/        @p1-owner
-# /planning/            @p2-owner
-# /docs/02-path-planning/          @p2-owner
-# /photogrammetry/      @p3-owner
-# /docs/03-forward-feed-photogrammetry/  @p3-owner
-# /common/              @p1-owner @p2-owner @p3-owner
-# /docs/04-cross-pipeline/         @p1-owner @p2-owner @p3-owner
+# *                                         @mesh-owner @planning-owner @photogrammetry-owner
+#
+# /mesh/                                    @mesh-owner
+# /planning/                                @planning-owner
+# /photogrammetry/                          @photogrammetry-owner
+#
+# Interfaces: producer + every consumer
+# /integration/interfaces/link-model.md     @mesh-owner @planning-owner @photogrammetry-owner
+# /integration/interfaces/goodput.md        @mesh-owner @photogrammetry-owner
+# /integration/interfaces/mission-plan.md   @planning-owner @photogrammetry-owner
+# /integration/interfaces/image-record.md   @photogrammetry-owner @mesh-owner
+# /integration/interfaces/coverage-holes.md @photogrammetry-owner @planning-owner
+# /integration/interfaces/run-metadata.md   @mesh-owner @planning-owner @photogrammetry-owner

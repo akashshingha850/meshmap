@@ -2,21 +2,18 @@
 
 ## Project
 
-MeshMap: mesh-fed forward-feed photogrammetry with a UAV swarm (BATMAN-adv mesh, path planning, swarm photogrammetry). See [docs/README.md](docs/README.md).
+MeshMap: mesh-fed forward-feed photogrammetry with a UAV swarm (BATMAN-adv mesh, path planning, swarm photogrammetry). [README.md](README.md) is the main doc: it links to every inner doc, so add new docs to its documentation map.
 
-## Team and repo layout
+## Repo layout
 
-- Three people, one pipeline each. Code folders: `mesh/` (P1), `planning/` (P2), `photogrammetry/` (P3); shared: `common/`, `analysis/`. Owners in [README.md](README.md); rules in [CONTRIBUTING.md](CONTRIBUTING.md).
-- Contracts between pipelines live in `docs/04-cross-pipeline/interfaces.md`. Changing one means bumping its version and updating producer and consumers together.
+- Split by owner, no numbered folders. Three people, one pipeline each: `mesh/` (P1), `planning/` (P2), `photogrammetry/` (P3). Shared work in `integration/`. Rules in [CONTRIBUTING.md](CONTRIBUTING.md).
+- Every pipeline folder has the same shape: `README.md` (status, inputs/outputs, contents), `docs/academic.md` (state of the art, gaps, RQs, evaluation, contributions, venues), `docs/technical.md` (architecture, hardware, software, configs, procedures, technical todo), and code folders as work starts. No `analysis/` folders. Keep academic and technical docs up to date when changing a pipeline.
+- `integration/interfaces/` has one file per hand-off between pipelines. Changing one means bumping its version, adding a change-log line, and updating producer and consumers together.
+- `integration/decisions/` holds dated decision records (`YYYY-MM-DD-title.md`, from `template.md`); add one for choices that affect more than one pipeline.
 - `runs/` holds flight data and is git-ignored.
-
-## Docs layout
-
-- All project documentation lives in `docs/`, one subfolder per pipeline (`01-mesh-networking/`, `02-path-planning/`, `03-forward-feed-photogrammetry/`, `04-cross-pipeline/`).
-- Each subfolder has `README.md` (index), `academic.md` (state of the art, gaps, RQs, evaluation, contributions, venues) and `technical.md` (architecture, hardware, software, configs, procedures, technical todo). Keep both academic and technical content up to date when changing a pipeline.
 - Cite sources inline with links; mark anything not verified as *verify* / unverified.
 
 ## Git
 
-- Do not add Claude (or any AI) as a co-author. No `Co-Authored-By: Claude ...` trailer in commit messages and no "Generated with Claude Code" line in PR descriptions.
-- Keep project files in this repo and push changes to GitHub (`origin`, branch `main`) when work is done.
+- Do not commit or push. The user reviews, commits and pushes manually.
+- Do not add Claude (or any AI) as a co-author anywhere.

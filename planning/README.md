@@ -1,21 +1,36 @@
-# planning/ — P2 Path planning
+# Path planning (P2)
 
-**Owner:** *TBD* · **Docs:** [academic](../docs/02-path-planning/academic.md) · [technical](../docs/02-path-planning/technical.md)
+[← Main doc](../README.md) · **Owner:** *TBD*
 
-Camera/footprint model, multi-UAV coverage + connectivity planner, SITL and network emulation.
+Where should each UAV fly and take pictures so the map is complete and the mesh stays connected? This pipeline builds a multi-UAV planner that combines photogrammetric coverage, oblique view geometry and measured mesh goodput, tests it in SITL with emulated links, and re-plans online when the quick-look map shows holes.
 
-**Produces:** I3 mission plans ([interfaces](../docs/04-cross-pipeline/interfaces.md)).
-**Consumes:** I1 link-capacity model, I5 coverage holes, I6 `run.yaml`.
+| Gives to others | Takes from others |
+| --- | --- |
+| [Mission plan](../integration/interfaces/mission-plan.md) → photogrammetry, flight ops | [Link-capacity model](../integration/interfaces/link-model.md) from mesh |
+| | [Coverage holes](../integration/interfaces/coverage-holes.md) from photogrammetry |
+| | [Run metadata](../integration/interfaces/run-metadata.md) |
 
-## Planned layout
+## Status
+
+- **Now:** *(owner updates this weekly)*
+- **Next:**
+- **Blocked on:**
+
+Full task list: [technical todo](docs/technical.md#technical-todo).
+
+## Contents
+
+| Path | Contents |
+| --- | --- |
+| [docs/academic.md](docs/academic.md) | State of the art, gaps, research questions and hypotheses, formal problem, evaluation design, contribution C7 |
+| [docs/technical.md](docs/technical.md) | Planner architecture, GSD/footprint maths, rig layout options, software stack, SITL + network emulation, mission conventions |
+
+Planned code folders, added as work starts:
 
 ```
-planning/
-├── camera/       # intrinsics → GSD, footprint, oblique footprint
-├── planners/     # lawnmower, double-grid, joint coverage + goodput (OR-Tools mTSP)
-├── replan/       # online re-plan service (I5 in, I3 out)
-├── sim/          # multi-vehicle PX4 SITL + Gazebo launch, tc-netem driven by I1
-└── tests/
+camera/       # intrinsics → GSD, footprint, oblique footprint
+planners/     # lawnmower, double-grid, joint coverage + goodput (OR-Tools mTSP)
+replan/       # online re-plan service: coverage holes in, mission plans out
+sim/          # multi-vehicle PX4 SITL + Gazebo, tc-netem driven by the link model
+tests/
 ```
-
-Todo list: [P2 technical todo](../docs/02-path-planning/technical.md#technical-todo).

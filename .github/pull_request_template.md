@@ -2,15 +2,16 @@
 
 <!-- One or two sentences. -->
 
-## Pipeline
+## Folder
 
-- [ ] P1 mesh
-- [ ] P2 planning
-- [ ] P3 photogrammetry
-- [ ] common / cross-pipeline
+- [ ] mesh
+- [ ] planning
+- [ ] photogrammetry
+- [ ] integration
 
 ## Checklist
 
-- [ ] Touches an interface in `docs/04-cross-pipeline/interfaces.md`? If yes: version bumped and every consumer tagged for review
-- [ ] Docs updated (`academic.md` / `technical.md`, todo list ticked)
+- [ ] Changes an interface in `integration/interfaces/`? Version bumped, change log updated, producer and all consumers tagged
+- [ ] Shared design choice? Decision record added in `integration/decisions/`
+- [ ] Docs updated (`docs/academic.md` / `docs/technical.md`, todo list ticked)
 - [ ] No large data (images, ULogs, pcaps) committed

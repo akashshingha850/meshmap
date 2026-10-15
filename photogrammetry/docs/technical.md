@@ -1,6 +1,6 @@
 # P3 Forward-feed swarm photogrammetry — Technical
 
-[← P3 index](README.md) · [Academic](academic.md)
+[← Main doc](../../README.md) · [P3 overview](../README.md) · [Academic](academic.md)
 
 How images are captured, scheduled over the mesh, and turned into maps.
 
@@ -55,19 +55,7 @@ Capture settings: fixed focus, shutter speed ≤ 1/1000 s, fixed white balance, 
 
 ## Image record (one per capture)
 
-```json
-{
-  "id": "uav1-cam0-000123",
-  "uav": "uav1", "cam": 0,
-  "t_capture_gnss": "2027-05-20T10:31:12.481203Z",
-  "lat": 65.0593, "lon": 25.4663, "alt_amsl": 92.4,
-  "roll": 0.8, "pitch": -1.2, "yaw": 87.5,
-  "pos_std_m": 1.5,
-  "keyframe_score": 0.73,
-  "sent": [{"rung": "thumb", "bytes": 48211, "t_send": "...", "t_recv": "...", "hops": 2}],
-  "file_fullres": "runs/2027-05-20/r03/uav1/cam0/000123.jpg"
-}
-```
+One JSON record per capture, written to `images.jsonl` and sent as `image_meta`. P3 owns the format, but other pipelines read it, so the schema and example live in [integration/interfaces/image-record.md](../../integration/interfaces/image-record.md).
 
 ## Scheduler
 

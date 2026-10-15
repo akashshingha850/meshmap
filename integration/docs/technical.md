@@ -1,6 +1,6 @@
-# Cross-pipeline — Technical
+# Integration — Technical
 
-[← Cross-pipeline index](README.md) · [Academic](academic.md)
+[← Main doc](../../README.md) · [Integration overview](../README.md) · [Academic](academic.md)
 
 Shared system architecture, hardware, data layout, schedule and risks.
 
@@ -37,9 +37,9 @@ flowchart TB
 | --- | --- | --- |
 | Multirotor airframe with PX4 FC (Pixhawk-class) | 1 | Payload ≥ 500 g for rig + Pi + radio |
 | Raspberry Pi 5 (8 GB) + active cooler | 1 | Companion computer |
-| Pi cameras (see [P3 rig options](../03-forward-feed-photogrammetry/technical.md#camera-rig)) | 3 | Plus mounts at the chosen tilt |
+| Pi cameras (see [P3 rig options](../../photogrammetry/docs/technical.md#camera-rig)) | 3 | Plus mounts at the chosen tilt |
 | Extra Pi (Zero 2 W) if rig option A/B | 1–3 | |
-| Wi-Fi adapter (IBSS + mesh point) + dual-band dipoles | 1 | See [P1 hardware](../01-mesh-networking/technical.md#hardware) |
+| Wi-Fi adapter (IBSS + mesh point) + dual-band dipoles | 1 | See [P1 hardware](../../mesh/docs/technical.md#hardware) |
 | GNSS with PPS (u-blox M9/F9P) | 1 | PPS → GPIO 18 |
 | NVMe or high-endurance SD (≥ 256 GB) | 1 | Full-res store |
 | 5 V BEC (≥ 5 A) + USB power meter | 1 | Pi 5 power budget + energy logging |
@@ -52,10 +52,10 @@ Ground side: GPU workstation or laptop, 1–2 ground relay nodes (Pi 5 + same ra
 runs/
   2027-05-20/
     r03/                      # one run = one flight / one factor setting
-      run.yaml                # factors: routing, underlay, transport, planner, arm, hops, weather
+      run.yaml                # factors per pipeline (interfaces/run-metadata.md)
       uav1/
         cam0/ cam1/ cam2/     # full-res JPEG originals
-        images.jsonl          # one image record per capture (P3 schema)
+        images.jsonl          # one image record per capture (interfaces/image-record.md)
         net/                  # iperf, batctl, station dump, tcpdump, chrony
         px4.ulg
       ground/
@@ -68,16 +68,7 @@ All timestamps are UTC from GNSS-disciplined clocks.
 
 ## Repository layout
 
-```
-docs/                      # this outline (academic + technical per pipeline)
-mesh/                      # P1: mesh-up scripts, Ansible, transport configs, harness
-planning/                  # P2: camera model, planners, SITL launch, netem
-photogrammetry/            # P3: capture node, scheduler, ground pipeline, evaluator
-common/                    # schemas and messages for the interfaces, run logging
-analysis/                  # notebooks/scripts for figures
-```
-
-Each code folder has a README with its owner and planned subfolders. Contracts between pipelines: [interfaces.md](interfaces.md). Ownership and review rules: [CONTRIBUTING.md](../../CONTRIBUTING.md).
+The repo is split by owner, not by file type. Each pipeline folder is self-contained (docs, code, analysis), and `integration/` holds everything the three share. See the [root README](../../README.md#repository-layout) for the tree and [CONTRIBUTING](../../CONTRIBUTING.md) for the review rules.
 
 ## Timeline
 

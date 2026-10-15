@@ -1,6 +1,6 @@
-# Cross-pipeline — Academic
+# Integration — Academic
 
-[← Cross-pipeline index](README.md) · [Technical](technical.md)
+[← Main doc](../../README.md) · [Integration overview](../README.md) · [Technical](technical.md)
 
 All three pipelines share one flight dataset. Every flight logs network, timing and photogrammetric data together. One campaign can therefore support three papers: networking (C3, C5), accuracy (C1, C4) and methods (C2, C7).
 

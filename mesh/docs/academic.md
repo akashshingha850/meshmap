@@ -1,6 +1,6 @@
 # P1 Mesh networking — Academic
 
-[← P1 index](README.md) · [Technical](technical.md)
+[← Main doc](../../README.md) · [P1 overview](../README.md) · [Technical](technical.md)
 
 Goal: describe how a flying BATMAN-adv mesh behaves when tuned, together with the ROS 2 transport on top of it. Telemetry must arrive reliably, and imagery must arrive at a known, measured rate. Few studies have tested BATMAN-adv in flight. One two-UAV study ranked default BATMAN-adv below Babel and OLSR and blamed the 1 s OGM interval ([Guillen-Perez et al. 2021](https://www.mdpi.com/2076-3417/11/10/4363)).
 
@@ -73,7 +73,7 @@ Run at least 3 repetitions per cell and report medians with IQR. Use a randomise
 
 ## Target venues
 
-ICUAS 2027, JIRS, Ad Hoc Networks, and IEEE VTC/GLOBECOM UAV workshops. See [cross-pipeline academic](../04-cross-pipeline/academic.md).
+ICUAS 2027, JIRS, Ad Hoc Networks, and IEEE VTC/GLOBECOM UAV workshops. See [integration academic notes](../../integration/docs/academic.md).
 
 ## Academic todo
 

@@ -1,21 +1,36 @@
-# photogrammetry/ — P3 Forward-feed photogrammetry
+# Forward-feed photogrammetry (P3)
 
-**Owner:** *TBD* · **Docs:** [academic](../docs/03-forward-feed-photogrammetry/academic.md) · [technical](../docs/03-forward-feed-photogrammetry/technical.md)
+[← Main doc](../README.md) · **Owner:** *TBD*
 
-Onboard capture and bandwidth-aware scheduling, ground quick-look and refinement, accuracy evaluation.
+What map quality can the swarm deliver live, per Mbit/s sent over the mesh, and how much does refinement after landing add? This pipeline captures and geotags images onboard, schedules what to send at which quality given the available goodput, builds a quick-look map on the ground, refines it after landing, and scores both on ground control points.
 
-**Produces:** I4 image records, I5 coverage holes ([interfaces](../docs/04-cross-pipeline/interfaces.md)).
-**Consumes:** I2 live goodput, I3 mission plans, I6 `run.yaml`.
+| Gives to others | Takes from others |
+| --- | --- |
+| [Image record](../integration/interfaces/image-record.md) → mesh, integration | [Live goodput](../integration/interfaces/goodput.md) and [link-capacity model](../integration/interfaces/link-model.md) from mesh |
+| [Coverage holes](../integration/interfaces/coverage-holes.md) → planning | [Mission plan](../integration/interfaces/mission-plan.md) from planning |
+| | [Run metadata](../integration/interfaces/run-metadata.md) |
 
-## Planned layout
+## Status
+
+- **Now:** *(owner updates this weekly)*
+- **Next:**
+- **Blocked on:**
+
+Full task list: [technical todo](docs/technical.md#technical-todo).
+
+## Contents
+
+| Path | Contents |
+| --- | --- |
+| [docs/academic.md](docs/academic.md) | State of the art, gaps, research questions and hypotheses, three-arm evaluation, contributions (C1, C2, C4, C6) |
+| [docs/technical.md](docs/technical.md) | Data flow, camera rig options, geotagging, scheduler and quality ladder, ground processing, field setup |
+
+Planned code folders, added as work starts:
 
 ```
-photogrammetry/
-├── capture/      # onboard capture node: libcamera, GNSS/PPS timestamps, pose prior
-├── scheduler/    # keyframe score, quality ladder, reachback
-├── ground/       # ingest, quick-look map, coverage-hole detection, refinement
-├── eval/         # GCP / check-point RMSE, completeness
-└── tests/
+capture/      # onboard capture node: libcamera, GNSS/PPS timestamps, pose prior
+scheduler/    # keyframe score, quality ladder, reachback
+ground/       # ingest, quick-look map, coverage-hole detection, refinement
+eval/         # GCP / check-point RMSE, completeness
+tests/
 ```
-
-Todo list: [P3 technical todo](../docs/03-forward-feed-photogrammetry/technical.md#technical-todo).

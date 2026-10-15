@@ -1,6 +1,6 @@
 # P2 Path planning for photogrammetry — Academic
 
-[← P2 index](README.md) · [Technical](technical.md)
+[← Main doc](../../README.md) · [P2 overview](../README.md) · [Technical](technical.md)
 
 Goal: a multi-UAV planner that places nadir and oblique shots for a complete, accurate reconstruction. It must also keep every UAV within the measured mesh range of a relay or the ground server. Planning for reconstruction quality and planning for connectivity have each been studied, but never together. No paper found plans for both photogrammetric quality and multi-hop mesh goodput.
 

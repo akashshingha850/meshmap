@@ -1,6 +1,6 @@
 # P1 Mesh networking — Technical
 
-[← P1 index](README.md) · [Academic](academic.md)
+[← Main doc](../../README.md) · [P1 overview](../README.md) · [Academic](academic.md)
 
 How the mesh is built, configured and measured. Commands target Raspberry Pi OS (Bookworm) and ROS 2 Jazzy. Any value marked *verify* has not been tested on our hardware yet.
 
