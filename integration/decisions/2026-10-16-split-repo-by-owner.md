@@ -17,7 +17,7 @@ Three people each own one pipeline, and the pipelines meet only at a few data ha
 
 ## Decision
 
-Option 3. Top-level folders `mesh/`, `planning/`, `photogrammetry/` and `integration/`, without number prefixes. No separate `analysis/` folders. Integration holds the [interfaces](../interfaces/README.md) (one file per contract, producer-owned, consumer-approved), these decision records and the joint docs. The root README is the one main doc and links to every inner doc.
+Option 3. Top-level folders `mesh/`, `planning/`, `photogrammetry/` and `integration/`, without number prefixes. No separate `analysis/` folders. Integration holds the [interfaces](../interfaces/README.md) (one file per contract, producer-owned, consumer-approved), these decision records and the joint docs. A root `docs/` folder holds the one main doc, which links to every inner doc; the root README stays minimal.
 
 ## Consequences
 

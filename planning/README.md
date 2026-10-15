@@ -1,6 +1,6 @@
 # Path planning (P2)
 
-[← Main doc](../README.md) · **Owner:** *TBD*
+[← Main doc](../docs/README.md) · **Owner:** *TBD*
 
 Where should each UAV fly and take pictures so the map is complete and the mesh stays connected? This pipeline builds a multi-UAV planner that combines photogrammetric coverage, oblique view geometry and measured mesh goodput, tests it in SITL with emulated links, and re-plans online when the quick-look map shows holes.
 

@@ -1,6 +1,6 @@
 # Integration — Technical
 
-[← Main doc](../../README.md) · [Integration overview](../README.md) · [Academic](academic.md)
+[← Main doc](../../docs/README.md) · [Integration overview](../README.md) · [Academic](academic.md)
 
 Shared system architecture, hardware, data layout, schedule and risks.
 

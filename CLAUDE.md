@@ -2,7 +2,7 @@
 
 ## Project
 
-MeshMap: mesh-fed forward-feed photogrammetry with a UAV swarm (BATMAN-adv mesh, path planning, swarm photogrammetry). [README.md](README.md) is the main doc: it links to every inner doc, so add new docs to its documentation map.
+MeshMap (Multi-hop Edge Swarm for Hybrid Mapping And Photogrammetry): mesh-fed forward-feed photogrammetry with a UAV swarm (BATMAN-adv mesh, path planning, swarm photogrammetry). [docs/README.md](docs/README.md) is the main doc: it links to every inner doc, so add new docs to its documentation map. Keep the root README.md minimal (title, owners, layout).
 
 ## Repo layout
 

@@ -1,6 +1,6 @@
 # P3 Forward-feed swarm photogrammetry — Technical
 
-[← Main doc](../../README.md) · [P3 overview](../README.md) · [Academic](academic.md)
+[← Main doc](../../docs/README.md) · [P3 overview](../README.md) · [Academic](academic.md)
 
 How images are captured, scheduled over the mesh, and turned into maps.
 

@@ -1,6 +1,6 @@
 # P3 Forward-feed swarm photogrammetry — Academic
 
-[← Main doc](../../README.md) · [P3 overview](../README.md) · [Technical](technical.md)
+[← Main doc](../../docs/README.md) · [P3 overview](../README.md) · [Technical](technical.md)
 
 Goal: a quick-look map on the ground server within minutes of covering the area, refined to decimetre accuracy after landing. Every image's path from capture to map is logged. Streaming every image at full resolution, continuously, is not feasible. A 5–10 MB still takes 5–10 s on a sustained 8 Mbps relay, while missions capture every 1–3 s. Three cameras triple the load. These figures are the review's own estimate.
 

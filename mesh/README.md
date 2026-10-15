@@ -1,6 +1,6 @@
 # Mesh networking (P1)
 
-[← Main doc](../README.md) · **Owner:** *TBD*
+[← Main doc](../docs/README.md) · **Owner:** *TBD*
 
 How much imagery and telemetry can a flying multi-hop BATMAN-adv mesh carry, and how fast does it recover when links break? This pipeline tunes the mesh and the ROS 2 transport, measures them on the bench, on the ground and in flight, and turns the results into a link-capacity model the other pipelines use.
 

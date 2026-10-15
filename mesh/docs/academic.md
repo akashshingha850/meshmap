@@ -1,6 +1,6 @@
 # P1 Mesh networking — Academic
 
-[← Main doc](../../README.md) · [P1 overview](../README.md) · [Technical](technical.md)
+[← Main doc](../../docs/README.md) · [P1 overview](../README.md) · [Technical](technical.md)
 
 Goal: describe how a flying BATMAN-adv mesh behaves when tuned, together with the ROS 2 transport on top of it. Telemetry must arrive reliably, and imagery must arrive at a known, measured rate. Few studies have tested BATMAN-adv in flight. One two-UAV study ranked default BATMAN-adv below Babel and OLSR and blamed the 1 s OGM interval ([Guillen-Perez et al. 2021](https://www.mdpi.com/2076-3417/11/10/4363)).
 

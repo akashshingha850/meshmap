@@ -1,6 +1,6 @@
 # Integration
 
-[← Main doc](../README.md) · **Owner:** all three. Changes here need review from every pipeline they affect.
+[← Main doc](../docs/README.md) · **Owner:** all three. Changes here need review from every pipeline they affect.
 
 Everything that ties the three pipelines into one project: the contracts between them, the decisions that affect more than one of them, the shared system and field campaigns, and the joint evaluation that the papers are built on.
 

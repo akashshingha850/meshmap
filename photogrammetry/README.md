@@ -1,6 +1,6 @@
 # Forward-feed photogrammetry (P3)
 
-[← Main doc](../README.md) · **Owner:** *TBD*
+[← Main doc](../docs/README.md) · **Owner:** *TBD*
 
 What map quality can the swarm deliver live, per Mbit/s sent over the mesh, and how much does refinement after landing add? This pipeline captures and geotags images onboard, schedules what to send at which quality given the available goodput, builds a quick-look map on the ground, refines it after landing, and scores both on ground control points.
 
