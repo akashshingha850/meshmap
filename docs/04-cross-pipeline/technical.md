@@ -66,16 +66,18 @@ runs/
 
 All timestamps are UTC from GNSS-disciplined clocks.
 
-## Planned repository layout
+## Repository layout
 
 ```
 docs/                      # this outline (academic + technical per pipeline)
 mesh/                      # P1: mesh-up scripts, Ansible, transport configs, harness
 planning/                  # P2: camera model, planners, SITL launch, netem
 photogrammetry/            # P3: capture node, scheduler, ground pipeline, evaluator
-common/                    # message definitions, logging, run.yaml schema
+common/                    # schemas and messages for the interfaces, run logging
 analysis/                  # notebooks/scripts for figures
 ```
+
+Each code folder has a README with its owner and planned subfolders. Contracts between pipelines: [interfaces.md](interfaces.md). Ownership and review rules: [CONTRIBUTING.md](../../CONTRIBUTING.md).
 
 ## Timeline
 

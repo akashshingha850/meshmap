@@ -14,7 +14,7 @@ docs/
 ├── 01-mesh-networking/                # P1
 ├── 02-path-planning/                  # P2
 ├── 03-forward-feed-photogrammetry/    # P3
-└── 04-cross-pipeline/                 # joint evaluation, venues, architecture, timeline, risks
+└── 04-cross-pipeline/                 # joint evaluation, interfaces, venues, architecture, timeline, risks
 ```
 
 | Pipeline | Question it answers | Primary output | Academic | Technical |
@@ -24,7 +24,7 @@ docs/
 | [P3 Forward-feed swarm photogrammetry](03-forward-feed-photogrammetry/README.md) | What map quality is reachable live, per Mbit/s, and how much does refinement add? | Quick-look map + refined model, scored on GCPs | [academic](03-forward-feed-photogrammetry/academic.md) | [technical](03-forward-feed-photogrammetry/technical.md) |
 | [Cross-pipeline](04-cross-pipeline/README.md) | How do the pipelines combine into papers and a schedule? | Joint evaluation, venues, timeline | [academic](04-cross-pipeline/academic.md) | [technical](04-cross-pipeline/technical.md) |
 
-How the pipelines feed each other:
+How the pipelines feed each other (formal contracts in [interfaces.md](04-cross-pipeline/interfaces.md)):
 
 - **P1 → P2:** the link-capacity model becomes the planner's goodput cost.
 - **P1 → P3:** the measured goodput sets the scheduler's bandwidth budget.

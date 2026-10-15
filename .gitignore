@@ -1,0 +1,27 @@
+# Flight and test data live on the shared drive, not in git
+runs/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ROS 2 / colcon
+build/
+install/
+log/
+
+# Large binaries
+*.ulg
+*.pcap
+*.pcapng
+*.bag
+*.mcap
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

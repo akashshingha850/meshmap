@@ -1,0 +1,12 @@
+# Replace the placeholders with GitHub usernames, then uncomment.
+# Later lines take precedence over earlier ones.
+
+# *                     @p1-owner @p2-owner @p3-owner
+# /mesh/                @p1-owner
+# /docs/01-mesh-networking/        @p1-owner
+# /planning/            @p2-owner
+# /docs/02-path-planning/          @p2-owner
+# /photogrammetry/      @p3-owner
+# /docs/03-forward-feed-photogrammetry/  @p3-owner
+# /common/              @p1-owner @p2-owner @p3-owner
+# /docs/04-cross-pipeline/         @p1-owner @p2-owner @p3-owner
