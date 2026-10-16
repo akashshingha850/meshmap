@@ -19,7 +19,7 @@
 
 ```
 meshmap/
-├── docs/                   main doc (overview + links to every inner doc), skills
+├── docs/                   main doc (overview + links to every inner doc), Claude skills plan
 ├── mesh/                   ┐
 ├── planning/               │ one per owner, same shape:
 ├── photogrammetry/         ┘   README.md  status, inputs/outputs

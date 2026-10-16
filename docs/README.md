@@ -42,7 +42,7 @@ Shared between pipelines:
 - [Interfaces](../integration/interfaces/README.md): [link-capacity model](../integration/interfaces/link-model.md) · [live goodput](../integration/interfaces/goodput.md) · [mission plan](../integration/interfaces/mission-plan.md) · [image record](../integration/interfaces/image-record.md) · [coverage holes](../integration/interfaces/coverage-holes.md) · [run metadata](../integration/interfaces/run-metadata.md)
 - [Decision records](../integration/decisions/README.md)
 - [How we work together](../CONTRIBUTING.md)
-- [Skills](skills.md): what each pipeline needs, how deeply, and where to learn it
+- [Claude skills](claude-skills.md): planned Claude Code skills for this repo, where they live and who owns them
 
 When you add a doc anywhere in the repo, add a link to it here.
 
