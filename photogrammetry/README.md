@@ -23,12 +23,12 @@ Full task list: [technical todo](docs/technical.md#technical-todo).
 | Path | Contents |
 | --- | --- |
 | [docs/academic.md](docs/academic.md) | State of the art, gaps, research questions and hypotheses, three-arm evaluation, contributions (C1, C2, C4, C6) |
-| [docs/technical.md](docs/technical.md) | Data flow, camera rig options, geotagging, scheduler and quality ladder, ground processing, field setup |
+| [docs/technical.md](docs/technical.md) | Data flow, SIYI A8 mini camera, trigger chain and geotagging, capture software (`siyi_sdk`, ROS 2 node survey), scheduler and quality ladder, ground processing, field setup |
 
 Planned code folders, added as work starts:
 
 ```
-capture/      # onboard capture node: libcamera, GNSS/PPS timestamps, pose prior
+capture/      # onboard ROS 2 capture node on siyi_sdk: PX4 trigger → photo, gimbal log, HTTP fetch, pose prior
 scheduler/    # keyframe score, quality ladder, reachback
 ground/       # ingest, quick-look map, coverage-hole detection, refinement
 eval/         # GCP / check-point RMSE, completeness

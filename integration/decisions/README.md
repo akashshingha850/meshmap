@@ -15,3 +15,4 @@ Short notes on design choices that affect more than one pipeline, or that we wil
 | Date | Decision | Status |
 | --- | --- | --- |
 | 2026-10-16 | [Split the repo by owner, with a shared integration folder](2026-10-16-split-repo-by-owner.md) | proposed |
+| 2026-10-16 | [UAV hardware: SIYI A8 mini, Raspberry Pi 5, Pixracer with PX4 + MAVROS](2026-10-16-uav-hardware-a8mini-pi5-pixracer.md) | proposed |

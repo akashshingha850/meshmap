@@ -6,7 +6,7 @@ The main doc. It gives the project overview and links to every other doc in the 
 
 ## Overview
 
-MeshMap asks how good a map a UAV swarm can deliver *while it is still flying* when imagery and telemetry share a 0.3–10 Mbit/s multi-hop BATMAN-adv mesh to a ground server with no internet. Each UAV carries three Raspberry Pi cameras (one nadir, two oblique), a PX4 flight controller and a Pi 5 companion computer.
+MeshMap asks how good a map a UAV swarm can deliver *while it is still flying* when imagery and telemetry share a 0.3–10 Mbit/s multi-hop BATMAN-adv mesh to a ground server with no internet. Each UAV carries a SIYI A8 mini gimbal camera (nadir and gimbal-pitched oblique shots), a Pixracer flight controller running PX4, and a Raspberry Pi 5 companion computer running MAVROS ([hardware decision](../integration/decisions/2026-10-16-uav-hardware-a8mini-pi5-pixracer.md)).
 
 Three pipelines, one per team member, share one testbed, one set of flights and one joint evaluation. They meet only at a few well-defined [interfaces](../integration/interfaces/README.md).
 
@@ -33,8 +33,8 @@ flowchart LR
 | Area | Overview | Academic (research) | Technical (engineering) |
 | --- | --- | --- | --- |
 | Mesh networking | [mesh/](../mesh/README.md) | [State of the art, gaps, RQ1, evaluation, C3/C5, venues](../mesh/docs/academic.md) | [Architecture, hardware, BATMAN-adv, ROS 2 transports, time sync, harness, tests](../mesh/docs/technical.md) |
-| Path planning | [planning/](../planning/README.md) | [State of the art, gaps, RQ2, formal problem, evaluation, C7](../planning/docs/academic.md) | [Planner, GSD/footprint maths, rig layouts, software, SITL + netem, missions](../planning/docs/technical.md) |
-| Forward-feed photogrammetry | [photogrammetry/](../photogrammetry/README.md) | [State of the art, gaps, RQ3, three-arm evaluation, C1/C2/C4/C6](../photogrammetry/docs/academic.md) | [Data flow, camera rig, geotagging, scheduler, ground processing, field setup](../photogrammetry/docs/technical.md) |
+| Path planning | [planning/](../planning/README.md) | [State of the art, gaps, RQ2, formal problem, evaluation, C7](../planning/docs/academic.md) | [Planner, GSD/footprint maths, gimbal oblique strategies, software, SITL + netem, missions](../planning/docs/technical.md) |
+| Forward-feed photogrammetry | [photogrammetry/](../photogrammetry/README.md) | [State of the art, gaps, RQ3, three-arm evaluation, C1/C2/C4/C6](../photogrammetry/docs/academic.md) | [Data flow, A8 mini camera, trigger and geotagging, capture software, scheduler, ground processing, field setup](../photogrammetry/docs/technical.md) |
 | Integration | [integration/](../integration/README.md) | [Positioning, contributions C1–C7, venues, joint evaluation, novelty check](../integration/docs/academic.md) | [System architecture, bill of materials, run layout, timeline, risks](../integration/docs/technical.md) |
 
 Shared between pipelines:

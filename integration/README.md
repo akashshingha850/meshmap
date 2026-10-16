@@ -13,6 +13,6 @@ Everything that ties the three pipelines into one project: the contracts between
 
 ## Thesis
 
-The Pi camera rig and the mesh are the testbed. The research contribution is a forward-feed architecture that adapts to the available bandwidth and to the mesh, plus a joint evaluation that reports network metrics and GCP accuracy from the same flights. No paper in the review does both on a multi-hop mesh.
+The UAV payload (SIYI A8 mini, Raspberry Pi 5, Pixracer with PX4 + MAVROS) and the mesh are the testbed. The research contribution is a forward-feed architecture that adapts to the available bandwidth and to the mesh, plus a joint evaluation that reports network metrics and GCP accuracy from the same flights. No paper in the review does both on a multi-hop mesh.
 
 All three pipelines share one flight dataset, so one campaign can support three papers: networking, accuracy and methods.

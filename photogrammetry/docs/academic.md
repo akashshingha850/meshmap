@@ -2,7 +2,7 @@
 
 [← Main doc](../../docs/README.md) · [P3 overview](../README.md) · [Technical](technical.md)
 
-Goal: a quick-look map on the ground server within minutes of covering the area, refined to decimetre accuracy after landing. Every image's path from capture to map is logged. Streaming every image at full resolution, continuously, is not feasible. A 5–10 MB still takes 5–10 s on a sustained 8 Mbps relay, while missions capture every 1–3 s. Three cameras triple the load. These figures are the review's own estimate.
+Goal: a quick-look map on the ground server within minutes of covering the area, refined to decimetre accuracy after landing. Every image's path from capture to map is logged. Streaming every image at full resolution, continuously, is not feasible. A 5–10 MB still takes 5–10 s on a sustained 8 Mbps relay, while missions capture every 1–3 s. These figures are the review's own estimate. The A8 mini's 8 MP stills are smaller (~3–6 MB, *verify*), but still too large to send all of them.
 
 ## Research study (state of the art)
 
@@ -25,7 +25,7 @@ Goal: a quick-look map on the ground server within minutes of covering the area,
 
 - No system reports bandwidth and GCP accuracy together on a multi-hop mesh (C1).
 - No image scheduler since 2015 adapts to the link while accounting for SfM needs (C2).
-- No peer-reviewed multi-Pi oblique rig has quantified accuracy or a sync-error study (C4).
+- No published trigger-latency or geotag-accuracy figures for low-cost SDK-triggered gimbal cameras such as the SIYI A8 mini; only forum reports exist (C4).
 - No study tests H.264/H.265 frames as SfM input.
 - Nobody has measured how inter-UAV clock offset affects multi-UAV SfM.
 
@@ -34,12 +34,12 @@ Goal: a quick-look map on the ground server within minutes of covering the area,
 - **RQ3.1:** How does map accuracy trade off against delivered bytes? Accuracy is RMSE on check points, for the quick-look and the refined product.
     - *H3.1:* At ≤ 20% of the send-all byte volume, the adaptive scheme reaches ≤ 1 m live RMSE without GCPs. After refinement it matches the offline baseline within 10%.
 - **RQ3.2:** Does choosing keyframes by SfM value (novelty, overlap, view angle) beat uniform subsampling at equal bytes?
-- **RQ3.3:** How much RMSE do the oblique cameras add or save at equal flight time, and how sensitive is it to inter-camera sync error (ms)?
+- **RQ3.3:** How much RMSE do gimbal-pitched oblique shots add or save at equal flight time, and how sensitive is it to the trigger-to-exposure latency and jitter (ms) of a software-triggered gimbal camera?
 - **RQ3.4:** At what JPEG quality and downscale factor does the quick-look map start to fail (tie points, completeness)?
 
 ## Research scope
 
-**In scope:** onboard capture stamped with GNSS time; full-res originals stored onboard; scheduler that adapts to the link; incremental ground quick-look; refinement after the flight; 3-camera rig calibration and sync study; three experimental arms; optional Jetson onboard filtering (C6).
+**In scope:** onboard capture stamped with GNSS time; full-res originals stored onboard; scheduler that adapts to the link; incremental ground quick-look; refinement after the flight; A8 mini calibration and trigger-latency study; three experimental arms; optional onboard filtering on the Pi 5 (C6).
 
 **Out of scope:** NeRF/3DGS as the primary product (side comparison only); video codecs as the mapping input (one compression arm only).
 
@@ -57,8 +57,8 @@ Three arms flown on the same flights and AOI:
 | --- | --- |
 | System | Time-to-first-map, time-to-complete-map, bytes/km², capture-to-tile latency, CPU/GPU load, power |
 | Photogrammetry | Horizontal/vertical RMSE on held-out RTK check points, reprojection error, tie points, completeness (% AOI, cloud-to-cloud vs offline), GSD |
-| Timing | Camera-to-autopilot offset, inter-camera sync spread, RMSE under injected offsets |
-| Compression | RMSE and completeness vs JPEG quality, downscale factor, and one H.264 arm |
+| Timing | Trigger-to-exposure latency and jitter, camera-to-autopilot offset, RMSE under injected offsets |
+| Compression | RMSE and completeness vs JPEG quality, downscale factor, and one arm using A8 mini RTSP frames (H.264/H.265) |
 
 Each arm runs at 1, 2 and 3 hops, with adaptation switched on and off. Report the RMSE-vs-Mbit trade-off curve as the headline figure.
 
@@ -66,13 +66,13 @@ Each arm runs at 1, 2 and 3 hops, with adaptation switched on and off. Report th
 
 - **C1:** joint network + GCP-accuracy evaluation (with P1).
 - **C2:** image scheduling that adapts to the mesh link and to SfM needs.
-- **C4:** low-cost 3-Pi nadir + oblique rig, with a sync-error study.
-- **C6 (optional):** onboard keyframe pre-filtering on a Jetson, with energy as a share of flight energy.
+- **C4:** low-cost gimbal-camera capture (SIYI A8 mini on a Pi 5, PX4-triggered) with a trigger-latency and geotag-error study.
+- **C6 (optional):** onboard keyframe pre-filtering on the Pi 5, with energy as a share of flight energy.
 
 ## Academic todo
 
 - [ ] Read OpenREALM and AIT pipelines in full; note their metrics and how they compute them
-- [ ] Search "multi-camera Raspberry Pi UAV oblique" and "H.264 SfM accuracy" for overlap
+- [ ] Search "SIYI A8 mini photogrammetry", "gimbal camera trigger latency geotag" and "H.264 SfM accuracy" for overlap
 - [ ] Define the keyframe score formally; justify it from SfM view-selection literature
 - [ ] Fix GCP / check point layout (count, distribution) following ISPRS practice
 - [ ] Write related-work sections for C1, C2 and C4

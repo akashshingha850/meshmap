@@ -19,14 +19,14 @@ Goal: a multi-UAV planner that places nadir and oblique shots for a complete, ac
 
 - Connectivity constraints are expressed as range, not as measured multi-hop goodput.
 - No planner decides *where to upload*, for example by flying into high-goodput zones before sending keyframes.
-- No plan uses the fixed geometry of a 3-camera rig to cut the number of flight lines.
+- No plan treats the gimbal angle of a single stabilised camera as a decision variable, trading oblique views against extra flight lines.
 - NBV methods are untested over a lossy link, where the ground map lags behind the drone.
 
 ## Research questions and hypotheses
 
 - **RQ2.1:** Does a planner with a goodput term reduce outage seconds and time-to-complete-map compared with lawnmower and double-grid baselines?
     - *H2.1:* With the same AOI and UAV count, the planner cuts outage seconds by ≥ 50% and loses no more than 5% in coverage completeness.
-- **RQ2.2:** How much flight time does a fixed nadir-plus-two-oblique rig save compared with a double-grid flown with one camera, at equal RMSE?
+- **RQ2.2:** At equal RMSE, how much flight time does sweeping the gimbal between triggers save, compared with separate oblique passes and with a nadir-only double-grid?
 - **RQ2.3:** Does re-planning online from the ground quick-look map (hole filling) improve completeness enough to justify the extra flight time?
 
 ## Formal problem (sketch)
@@ -42,7 +42,7 @@ J = \sum_k T(P_k) \;-\; \alpha \, Q\!\left(\bigcup_k V_k\right) \;+\; \beta \sum
 - *g(x)* is the predicted end-to-end goodput at position *x*, taken from P1's link-capacity model.
 - *g*<sub>min</sub> is the goodput needed by P3's scheduler.
 
-Constraints: battery, altitude limits, AOI and no-fly polygons, and per-camera overlap.
+Constraints: battery, altitude limits, AOI and no-fly polygons, per-view-direction overlap, gimbal limits and slew time, and the camera's minimum shot interval.
 
 ## Research scope
 

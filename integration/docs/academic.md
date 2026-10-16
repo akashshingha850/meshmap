@@ -6,14 +6,14 @@ All three pipelines share one flight dataset. Every flight logs network, timing 
 
 ## Positioning
 
-No reviewed paper combines a UAV multi-camera rig, image + MAVROS traffic over a multi-hop BATMAN-adv mesh, and live photogrammetry on a ground server with no internet. Five neighbouring fields each cover part of this, and none covers all of it:
+No reviewed paper combines low-cost UAV gimbal-camera capture, image + MAVROS traffic over a multi-hop BATMAN-adv mesh, and live photogrammetry on a ground server with no internet. Five neighbouring fields each cover part of this, and none covers all of it:
 
 | Strand | Closest prior work | What it leaves out |
 | --- | --- | --- |
 | Mesh routing tested in flight | Guillen-Perez 2021; Yanmaz 2014; Hayat 2015 | 2 UAVs, 1–2 hops, no images, no photogrammetry, no ROS |
 | ROS 2 over wireless/mesh | Chovet 2025; Zhang et al. (TIERS); Lee 2025 | Ground rovers, ≤ 64 KB synthetic payloads, 802.11s not BATMAN-adv |
 | Real-time UAV mapping | OpenREALM 2020; AIT 2021–2025; Wischounig-Strucl 2012/2015 | Single-hop links; link behaviour not studied together with accuracy |
-| Multi-camera / oblique photogrammetry | Nesbit 2019; Bannakulpiphat 2024; Piras 2017 | No multi-Pi oblique rig on a UAV; no real-time use |
+| Low-cost / oblique photogrammetry | Nesbit 2019; Bannakulpiphat 2024; Piras 2017 | No trigger-latency or geotag study for SDK-triggered gimbal cameras; no real-time use |
 | Robot meshes proven in the field | DARPA SubT MARBLE 2022; CHORD (JPL) 2021 | Ground robots, ROS 1, imagery for situational awareness rather than mapping |
 | Planning for coverage + connectivity | Smith 2018; Zhang 2023; Samshad & Rajawat 2024 | Quality and connectivity are never planned together; range, not goodput |
 
@@ -26,9 +26,9 @@ No reviewed paper combines a UAV multi-camera rig, image + MAVROS traffic over a
 | C1 | Joint network + GCP-accuracy evaluation on 1–3 hop BATMAN-adv | P1 + P3 | High | ICUAS 2027, then MDPI Drones |
 | C2 | Image scheduling that adapts to the mesh link and to SfM needs | P3 | High | DroNet 2027 |
 | C3 | ROS 2 transport benchmark over flying BATMAN-adv | P1 | High, but most exposed to unseen IEEE work | ICUAS / JIRS / Ad Hoc Networks |
-| C4 | Low-cost 3-Pi nadir + oblique rig, sync-error study | P3 | Medium–high | ISPRS GSW / UAV-g 2027 |
+| C4 | Low-cost gimbal-camera capture (A8 mini + Pi 5), trigger-latency and geotag-error study | P3 | Medium (less novel than the old 3-camera rig; check overlap) | ISPRS GSW / UAV-g 2027 |
 | C5 | Tuned BATMAN-adv in flight, convergence time, 3+ hops | P1 | Medium | IEEE VTC / GLOBECOM workshops |
-| C6 | Onboard keyframe pre-filtering on a Jetson | P3 | Medium | DroneSys 2027 |
+| C6 | Onboard keyframe pre-filtering on the Pi 5 | P3 | Medium | DroneSys 2027 |
 | C7 | Photogrammetric path planning for a mesh swarm that accounts for link goodput | P2 | Medium (searched only lightly) | ICUAS / IROS 2027 |
 
 C1 + C2 together make the strongest paper. For ICUAS, use only uasconferences.com, because look-alike listings are predatory.
@@ -51,7 +51,7 @@ C1 + C2 together make the strongest paper. For ICUAS, use only uasconferences.co
 | Planning (P2) | Flight time, energy, outage seconds, image count, completeness | Completeness equal to or better than lawnmower, with fewer outage seconds |
 | System (P3) | Time-to-first-map, time-to-complete-map, bytes/km², CPU/GPU load and power | First usable overview within minutes of coverage (inferred target) |
 | Photogrammetry (P3) | Horizontal/vertical RMSE on held-out check points, reprojection error, completeness, GSD | ≤ 10 cm GSD; ~1 m live without GCPs; decimetre after refinement |
-| Timing (all) | Camera-to-autopilot offset, inter-camera sync spread, RMSE under injected offsets | velocity × offset < GSD |
+| Timing (all) | Trigger-to-exposure latency and jitter, camera-to-autopilot offset, RMSE under injected offsets | velocity × jitter < GSD for refined; < 1 m for live |
 
 Headline figure: RMSE (m) vs delivered Mbit, one curve per arm and hop count.
 
@@ -62,7 +62,7 @@ Headline figure: RMSE (m) vs delivered Mbit, one curve per arm and hop count.
     - "rmw_zenoh UAV"
     - mesh + "real-time photogrammetry" / orthomosaic
     - "FANET image offloading SfM"
-    - "multi-camera Raspberry Pi UAV oblique"
+    - "SIYI A8 mini" photogrammetry / gimbal camera trigger latency
     - connectivity-aware + reconstruction path planning
 - [ ] Forward citations of Guillen-Perez 2021, Chovet 2025, OpenREALM 2020, Samshad & Rajawat 2024
 - [ ] Read arXiv 2606.27028 for overlap with C3/C5

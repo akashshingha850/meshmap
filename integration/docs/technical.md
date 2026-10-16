@@ -9,10 +9,10 @@ Shared system architecture, hardware, data layout, schedule and risks.
 ```mermaid
 flowchart TB
     subgraph UAVn[Each UAV]
-        PX4[PX4 flight controller] -- serial/MAVLink --> MAVROS
+        PX4[Pixracer / PX4] -- TELEM2 MAVLink --> MAVROS
         GNSS[GNSS + PPS] --> CHRONY[chrony]
-        CAMS[3x Pi cameras] --> CAP[capture node]
-        MAVROS --> CAP
+        CAM[SIYI A8 mini] -- Ethernet: SDK, HTTP --> CAP[capture node]
+        MAVROS -- CAMERA_TRIGGER, pose --> CAP
         CAP --> SCH[scheduler]
         SCH --> BR[zenoh bridge]
         MAVROS --> BR
@@ -35,14 +35,16 @@ flowchart TB
 
 | Item | Qty | Notes |
 | --- | --- | --- |
-| Multirotor airframe with PX4 FC (Pixhawk-class) | 1 | Payload ≥ 500 g for rig + Pi + radio |
-| Raspberry Pi 5 (8 GB) + active cooler | 1 | Companion computer |
-| Pi cameras (see [P3 rig options](../../photogrammetry/docs/technical.md#camera-rig)) | 3 | Plus mounts at the chosen tilt |
-| Extra Pi (Zero 2 W) if rig option A/B | 1–3 | |
+| Multirotor airframe | 1 | Payload ≥ 350 g for camera + Pi + radio + GNSS (*verify* after weighing) |
+| mRo Pixracer (FMUv4) running PX4 | 1 | `px4_fmu-v4_default`; TELEM2 → Pi (MAVROS), TELEM1 free for a backup telemetry radio ([PX4 Pixracer](https://docs.px4.io/main/en/flight_controller/pixracer)) |
+| Raspberry Pi 5 (8 GB) + active cooler | 1 | Companion computer: MAVROS, capture node, scheduler, mesh |
+| SIYI A8 mini gimbal camera | 1 | 95 g; Ethernet to the Pi; own power input (*verify* voltage range for our airframe); see [P3 camera](../../photogrammetry/docs/technical.md#camera-siyi-a8-mini) |
+| microSD for the A8 mini (Class 10) | 1 | Camera-side copy of every still |
 | Wi-Fi adapter (IBSS + mesh point) + dual-band dipoles | 1 | See [P1 hardware](../../mesh/docs/technical.md#hardware) |
-| GNSS with PPS (u-blox M9/F9P) | 1 | PPS → GPIO 18 |
+| GNSS with PPS (u-blox M9/F9P) | 1 | Pixracer GPS port for navigation; PPS line broken out to Pi GPIO 18 (*verify* the module exposes PPS), or a second receiver for the Pi |
 | NVMe or high-endurance SD (≥ 256 GB) | 1 | Full-res store |
 | 5 V BEC (≥ 5 A) + USB power meter | 1 | Pi 5 power budget + energy logging |
+| FTDI/JST-GH cable, Pixracer TELEM2 → Pi UART | 1 | Or USB-serial; 921600 baud (*verify*) |
 
 Ground side: GPU workstation or laptop, 1–2 ground relay nodes (Pi 5 + same radio on a mast), RTK base + rover for the GCP survey.
 
@@ -54,7 +56,8 @@ runs/
     r03/                      # one run = one flight / one factor setting
       run.yaml                # factors per pipeline (interfaces/run-metadata.md)
       uav1/
-        cam0/ cam1/ cam2/     # full-res JPEG originals
+        cam0/                 # full-res JPEG originals fetched from the A8 mini
+        gimbal.csv            # SIYI SDK attitude log
         images.jsonl          # one image record per capture (interfaces/image-record.md)
         net/                  # iperf, batctl, station dump, tcpdump, chrony
         px4.ulg
@@ -88,7 +91,7 @@ gantt
     Planner in SITL             :2026-11-15, 2027-03-31
     Flights: campaign B         :2027-05-01, 2027-07-31
     section P3 Photogrammetry
-    Rig + ground pipeline       :2026-11-01, 2027-02-28
+    Camera + ground pipeline    :2026-11-01, 2027-02-28
     Joint flights: campaign C   :2027-05-15, 2027-08-31
     section Papers
     ICUAS paper (~Feb)          :crit, milestone, 2027-02-15, 0d
@@ -104,8 +107,11 @@ The first paper uses bench and ground mesh results plus preliminary accuracy. Th
 | --- | --- | --- |
 | Recent IEEE paper already covers C1/C3 | Novelty claim fails | Novelty check before writing ([academic](academic.md#novelty-check-before-any-submission)) |
 | Pi onboard Wi-Fi range ~60 m | Too few hops at useful altitude | USB or mini-PCIe radios; ground relays; fly higher |
-| Pi 5 has only 2 CSI ports | 3-camera rig harder than planned | Rig options A–D in P3 technical |
+| A8 mini has no sensor timestamp; software trigger latency and jitter unknown | Geotag error dominates live RMSE | Bench latency calibration before any flight; record jitter in every image record; timing-injection study (RQ4) |
+| One gimbal camera instead of a fixed oblique rig | Obliques cost flight time or trigger rate | Compare oblique strategies in SITL first (P2 RQ2.2) |
+| SIYI SDK/firmware differs from published docs (forum reports) | Commands or media API misbehave | Pin the camera firmware version per run (`run.yaml`); test every command on the bench |
+| Pixracer: 2 MB flash, no uXRCE-DDS client in the default build | Some PX4 features unavailable | MAVROS only; check each needed module is in `px4_fmu-v4_default` before relying on it |
 | Winter weather and cold batteries | Lost flight days | Bench and SITL work in winter; flights Apr–Aug; Arctic trials as a later extension |
-| Inter-camera or GNSS timing drift | Geotag error dominates RMSE | GNSS/PPS stamping at capture; measure sync spread first |
+| GNSS or FC-to-Pi clock drift | Geotag error dominates RMSE | GNSS/PPS on the Pi; MAVROS timesync; log chrony offsets per run |
 | Flight permits for multi-UAV | Campaign delay | Apply early; use a fixed test site |
-| Payload weight / power on small airframes | Short flights, fewer runs | Weigh the rig early; log energy per flight |
+| Payload weight / power on small airframes | Short flights, fewer runs | Weigh camera + Pi + radio early; log energy per flight |

@@ -23,12 +23,12 @@ Full task list: [technical todo](docs/technical.md#technical-todo).
 | Path | Contents |
 | --- | --- |
 | [docs/academic.md](docs/academic.md) | State of the art, gaps, research questions and hypotheses, formal problem, evaluation design, contribution C7 |
-| [docs/technical.md](docs/technical.md) | Planner architecture, GSD/footprint maths, rig layout options, software stack, SITL + network emulation, mission conventions |
+| [docs/technical.md](docs/technical.md) | Planner architecture, A8 mini GSD/footprint maths, gimbal oblique strategies, software stack, SITL + network emulation, mission conventions |
 
 Planned code folders, added as work starts:
 
 ```
-camera/       # intrinsics → GSD, footprint, oblique footprint
+camera/       # A8 mini intrinsics → GSD, footprint, oblique footprint per gimbal angle
 planners/     # lawnmower, double-grid, joint coverage + goodput (OR-Tools mTSP)
 replan/       # online re-plan service: coverage holes in, mission plans out
 sim/          # multi-vehicle PX4 SITL + Gazebo, tc-netem driven by the link model

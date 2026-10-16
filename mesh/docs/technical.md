@@ -9,8 +9,8 @@ How the mesh is built, configured and measured. Commands target Raspberry Pi OS 
 ```mermaid
 flowchart LR
     subgraph UAV1[UAV 1]
-        FC1[PX4 FC] -- serial --> M1[MAVROS]
-        CAM1[3x Pi cams] --> CAP1[capture node]
+        FC1[Pixracer / PX4] -- TELEM2 serial --> M1[MAVROS]
+        CAM1[SIYI A8 mini] -- eth0, own subnet --> CAP1[capture node]
         M1 & CAP1 --> ZB1[zenoh bridge]
         ZB1 --> BAT1[bat0]
     end
@@ -26,6 +26,8 @@ flowchart LR
 ```
 
 - **Layer 2:** BATMAN-adv makes every node look like it sits on one Ethernet segment (`bat0`). IP addressing is static per node: `10.42.0.<node-id>/24`.
+- **Camera link:** the A8 mini sits on the Pi's `eth0` in its own subnet (`192.168.144.0/24`). Never add `eth0` to `bat0` and never forward between the two: the camera's RTSP stream would flood the mesh. Images cross the mesh only through the P3 scheduler.
+- **Flight controller:** the Pixracer's PX4 build (`px4_fmu-v4`) has the uXRCE-DDS client disabled (`CONFIG_MODULES_UXRCE_DDS_CLIENT=n` in [default.px4board](https://github.com/PX4/PX4-Autopilot/blob/main/boards/px4/fmu-v4/default.px4board)), so MAVROS is the only ROS 2 path from the FC. That makes MAVROS-vs-uXRCE-DDS comparisons out of scope on this airframe.
 - **ROS 2:** DDS stays on each host (`ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST`). Only allow-listed topics cross the mesh through zenoh-bridge-ros2dds, as the zenoh-plugin-ros2dds README advises.
 - **Time:** every UAV disciplines its clock from GNSS + PPS. The ground server syncs from a GNSS receiver or from a UAV over chrony.
 
@@ -33,7 +35,8 @@ flowchart LR
 
 | Item | Choice | Notes |
 | --- | --- | --- |
-| Companion computer | Raspberry Pi 5 (8 GB) | One per UAV; ground server is a laptop/mini-PC |
+| Companion computer | Raspberry Pi 5 (8 GB) | One per UAV; ground server is a laptop/mini-PC. Onboard Ethernet is used by the A8 mini |
+| Flight controller | mRo Pixracer (FMUv4), PX4 | MAVROS on TELEM2. Turn off the onboard ESP8266 Wi-Fi bridge in flight: it is a second 2.4 GHz radio and a second MAVLink path (*verify* how on our board revision) |
 | Radio, option A | Pi onboard Wi-Fi (brcmfmac) | Baseline only; ~60 m range in the UCI study; *verify* IBSS support; no 802.11s |
 | Radio, option B | USB adapter with mt76 / ath9k_htc driver (e.g. ALFA AWUS036ACM, mt7612u) | Supports IBSS + mesh point; external antenna |
 | Radio, option C | mini-PCIe ath9k/ath10k via M.2/PCIe HAT | Research-grade range (Hayat 2015 used Atheros cards); heavier |

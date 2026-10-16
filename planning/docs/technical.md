@@ -9,7 +9,7 @@ How missions are computed, simulated and flown.
 ```mermaid
 flowchart LR
     AOI[AOI polygon + no-fly zones] --> VP[viewpoint generator]
-    RIG[rig geometry + camera model] --> VP
+    RIG[A8 mini camera model + gimbal limits] --> VP
     LCM[P1 link-capacity model] --> COST[goodput cost map]
     VP --> ALLOC[multi-UAV split: partition / mTSP]
     COST --> ALLOC
@@ -23,7 +23,7 @@ flowchart LR
 For a nadir camera at height *h* above ground, with pixel pitch *p*, focal length *f* and image size *W* × *H* px:
 
 ```latex
-\mathrm{GSD} = \frac{p \, h}{f}, \qquad
+\mathrm{GSD} = \frac{p \, h}{f} = \frac{2h\tan(\mathrm{HFOV}/2)}{W}, \qquad
 \text{footprint} = \mathrm{GSD}\cdot W \times \mathrm{GSD}\cdot H
 ```
 
@@ -32,24 +32,25 @@ For a nadir camera at height *h* above ground, with pixel pitch *p*, focal lengt
 \text{trigger distance} = \mathrm{GSD}\cdot H\,(1 - o_{\text{fwd}})
 ```
 
-The examples below assume Pi Camera Module 3 (IMX708: 1.4 µm pixels, 4608 × 2592 px, f = 4.74 mm), with the long side across track and 70% side / 80% forward overlap.
+The examples below assume the SIYI A8 mini at zoom 1× (3840 × 2160 px, HFOV 81°, so f ≈ 2250 px; see [P3 camera notes](../../photogrammetry/docs/technical.md#camera-siyi-a8-mini)), gimbal locked at nadir, with the long side across track and 70% side / 80% forward overlap.
 
 | Height | GSD | Footprint | Line spacing | Trigger distance | Interval at 8 m/s |
 | --- | --- | --- | --- | --- | --- |
-| 50 m | 1.48 cm | 68 × 38 m | 20.4 m | 7.7 m | ~1.0 s |
-| 80 m | 2.36 cm | 109 × 61 m | 32.7 m | 12.3 m | ~1.5 s |
-| 120 m | 3.54 cm | 163 × 92 m | 49.0 m | 18.4 m | ~2.3 s |
+| 50 m | 2.22 cm | 85 × 48 m | 25.6 m | 9.6 m | ~1.2 s |
+| 80 m | 3.56 cm | 137 × 77 m | 41.0 m | 15.4 m | ~1.9 s |
+| 120 m | 5.34 cm | 205 × 115 m | 61.5 m | 23.1 m | ~2.9 s |
 
-These are calculated values. Check them against calibrated intrinsics once the rig is built.
+These are calculated from vendor specs. If the stills turn out to be 4096 px wide, GSD drops by ~6%. Recompute from calibrated intrinsics before the first flight. The wide FOV means the image edges already look ~40° off nadir, and GSD there is coarser than the table shows. The trigger interval must also stay above the A8 mini's minimum shot interval (*verify*).
 
-**Oblique cameras** tilted θ from nadir (vertical FOV φ) cover the ground from *h*·tan(θ − φ/2) to *h*·tan(θ + φ/2) out from the nadir point. GSD at the image centre is roughly GSD<sub>nadir</sub> / cos θ across the tilt direction and GSD<sub>nadir</sub> / cos²θ along it. At θ = 30°, that is about 1.15× and 1.33× the nadir GSD.
+**Oblique shots** with the gimbal pitched θ from nadir (vertical FOV φ) cover the ground from *h*·tan(θ − φ/2) to *h*·tan(θ + φ/2) out from the nadir point. GSD at the image centre is roughly GSD<sub>nadir</sub> / cos θ across the tilt direction and GSD<sub>nadir</sub> / cos²θ along it. At θ = 30°, that is about 1.15× and 1.33× the nadir GSD.
 
-**Rig layout options (decide before building):**
+**Oblique strategies with one gimbal camera (decide in SITL first).** The A8 mini gimbal covers pitch −90° to +25° and yaw ±135° (*verify* on our unit). The capture node on the Pi sets the angle through the SIYI SDK; PX4 does not drive the gimbal.
 
-| Option | Obliques point | Pro | Con |
+| Option | How | Pro | Con |
 | --- | --- | --- | --- |
-| A | Left + right (cross-track) | Wider swath, fewer lines | Only 2 view directions per pass; double-grid needed for 4 |
-| B | Forward + back (along-track) | Strong along-track parallax | Same swath as nadir |
+| A | Nadir grid, then separate oblique passes with a fixed gimbal pitch (e.g. 30° off nadir) | Simple; the gimbal never moves mid-leg | Extra flight lines; flight time grows with each view direction |
+| B | Gimbal yaw/pitch swept between triggers (e.g. nadir → left → right) on one grid | Several view directions per pass | Slew + settle time limits the trigger rate; needs gimbal attitude per shot |
+| C | Nadir only, relying on the wide 81° HFOV for edge obliquity | Shortest flight | Weaker oblique geometry; the baseline for RQ2.2 |
 
 ## Software stack
 
@@ -71,13 +72,14 @@ tc qdisc add dev veth-uav1 root netem rate 4mbit delay 40ms 10ms loss 2%
 ## Mission conventions
 
 - Altitude AGL, constant per mission, with terrain following off in phase 1.
-- PX4 triggers the cameras by distance (`TRIG_MODE` distance-based). The `camera_capture` feedback events are logged for geotag checks (P3).
+- PX4 on the Pixracer triggers by distance (`TRIG_INTERFACE` = MAVLink, `TRIG_MODE` distance or survey). The Pi fires the A8 mini on each `CAMERA_TRIGGER` ([P3 trigger chain](../../photogrammetry/docs/technical.md#capture-and-geotagging)). Trigger counts are logged for geotag checks.
+- Each leg carries its gimbal set-point (pitch, yaw) in `plan.json`. The capture node applies it at the leg's start waypoint.
 - Turn-around legs extend beyond the AOI so no image is taken mid-turn. Piras et al. 2017 saw 2.3 m offsets at turns.
 - Each UAV flies its own altitude layer (≥ 5 m apart) for basic separation.
 
 ## Technical todo
 
-- [ ] Camera model module (intrinsics → GSD, footprint, oblique footprint)
+- [ ] Camera model module for the A8 mini (intrinsics → GSD, footprint, oblique footprint at a gimbal angle)
 - [ ] Lawnmower and double-grid generators → MAVROS missions; check in QGroundControl
 - [ ] Multi-vehicle PX4 SITL + Gazebo launch; tc-netem link emulation driven by the P1 model
 - [ ] Goodput cost raster and OR-Tools mTSP with the cost term
