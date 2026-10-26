@@ -116,7 +116,7 @@ def settle(seconds: float) -> None:
 def measure_step(cfg: dict[str, Any], distance_m: float) -> tuple[dict[str, Any], list[Sample]]:
     """Run the collector alongside ping, TCP and UDP and return (summary row, raw samples)."""
     test, peer, port = cfg["test"], cfg["ips"]["pi2"], cfg["iperf"]["port"]
-    collector = Collector(cfg["interface"])
+    collector = Collector(cfg["interface"], peer_mac=cfg.get("peer_mac"))
     notes: list[str] = []
     results: dict[str, Any] = {"ping": None, "tcp": None, "udp": None}
     collector.start()

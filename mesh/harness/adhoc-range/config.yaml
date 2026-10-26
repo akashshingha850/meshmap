@@ -7,6 +7,10 @@ interface: wlan0
 frequency_mhz: 5180          # must match FREQ_MHZ in mesh.conf (ch 36, indoor-only in FI); used by linkbudget only
 tx_power_dbm: 15             # assumed, for linkbudget only: brcmfmac reports 31 dBm but may ignore the setting (verify)
 
+# Pi 2's wlan0 MAC (`cat /sys/class/net/wlan0/address` on Pi 2). Set it on brcmfmac: `iw station dump` is empty
+# in IBSS there, `iw station get <mac>` works. null = use `station dump`.
+peer_mac: "2c:cf:67:09:97:c1"
+
 # bat0 addresses (SUBNET.N from mesh.conf)
 ips:
   pi1: 10.10.0.1             # fixed node, runs the collector and the iperf3 client

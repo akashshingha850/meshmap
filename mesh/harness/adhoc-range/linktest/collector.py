@@ -175,8 +175,9 @@ def build_sample(
 class Collector:
     """Background thread that polls `iw` every `interval_s` and keeps the samples."""
 
-    def __init__(self, interface: str, interval_s: float = 1.0) -> None:
+    def __init__(self, interface: str, interval_s: float = 1.0, peer_mac: Optional[str] = None) -> None:
         self.interface = interface
+        self.peer_mac = peer_mac
         self.interval_s = interval_s
         self.phase = ""
         self.samples: list[Sample] = []
@@ -187,10 +188,12 @@ class Collector:
     def poll_once(self) -> Sample:
         """Run both `iw` commands once and return the resulting sample."""
         ts = time.time()
-        rc, out, err = run(["iw", "dev", self.interface, "station", "dump"], timeout=5)
+        # brcmfmac IBSS: `station dump` is empty, `station get <mac>` works
+        action = ["station", "get", self.peer_mac] if self.peer_mac else ["station", "dump"]
+        rc, out, err = run(["iw", "dev", self.interface, *action], timeout=5)
         stations = parse_station_dump(out) if rc == 0 else []
         if rc != 0:
-            log.warning("station dump failed: %s", err.strip() or f"exit {rc}")
+            log.warning("%s failed: %s", " ".join(action[:2]), err.strip() or f"exit {rc}")
         rc, out, err = run(["iw", "dev", self.interface, "survey", "dump"], timeout=5)
         noise = noise_in_use(parse_survey_dump(out)) if rc == 0 else None
         if noise is None and not self._warned_survey:
