@@ -25,3 +25,6 @@ log/
 Thumbs.db
 .vscode/
 .idea/
+
+# Credentials
+.env

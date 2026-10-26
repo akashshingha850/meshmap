@@ -146,7 +146,7 @@ Log `chronyc tracking` once a second on every node. The offset between nodes is 
 | Discovery bytes | `tcpdump -i bat0` on every hop, filtered on RTPS/Zenoh ports | Bytes per hop |
 | Radio | `iw dev <if> station dump` (RSSI, tx bitrate, retries) at 1 Hz | CSV |
 
-The two-node range and signal-quality test (step 2 of the procedure below) is implemented in [harness/adhoc-range](../harness/adhoc-range/README.md); it uses 2.4 GHz and `192.168.50.0/24` on the bare IBSS interface, so tear it down before the BATMAN-adv bring-up.
+The two-node range and signal-quality test (step 2 of the procedure below) is implemented in [harness/adhoc-range](../harness/adhoc-range/README.md); it runs on the live mesh (bat0, `10.10.0.0/24`), so bring the mesh up first.
 
 Log everything with GNSS-disciplined timestamps under `runs/<date>/<run-id>/<node>/`.
 

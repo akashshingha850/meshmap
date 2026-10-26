@@ -1,19 +1,16 @@
 # Single source of truth for scripts/*.sh and the linktest package.
 # Relative paths are resolved against this file's directory.
 
-# Radio. Setup assumed here: two Raspberry Pi 5, onboard Wi-Fi (brcmfmac).
+# Radio and addressing come from the running mesh (mesh/bringup/mesh.conf); nothing here configures it.
+# Traffic goes over bat0, RSSI/MCS/retries come from `iw station dump` on the underlying interface.
 interface: wlan0
-ssid: adhoctest
-bssid: "02:ca:fe:ca:fe:01"   # fixed BSSID so both nodes always merge into one cell
-frequency_mhz: 2412          # 2.4 GHz ch 1. 5 GHz 5150-5250 MHz is indoor-only in FI (iw reg get)
-ht_mode: HT20                # 20 MHz. Use NOHT if the join fails (brcmfmac IBSS has no reliable HT)
-tx_power_dbm: 15             # null = leave the driver default (then linkbudget needs it set)
+frequency_mhz: 5180          # must match FREQ_MHZ in mesh.conf (ch 36, indoor-only in FI); used by linkbudget only
+tx_power_dbm: 15             # assumed, for linkbudget only: brcmfmac reports 31 dBm but may ignore the setting (verify)
 
-# Addressing (/24)
+# bat0 addresses (SUBNET.N from mesh.conf)
 ips:
-  pi1: 192.168.50.1          # fixed node, runs the collector and the iperf3 client
-  pi2: 192.168.50.2          # moving node, runs scripts/start_server.sh
-prefix_len: 24
+  pi1: 10.10.0.1             # fixed node, runs the collector and the iperf3 client
+  pi2: 10.10.0.2             # moving node, runs scripts/start_server.sh
 
 # Measurement
 test:

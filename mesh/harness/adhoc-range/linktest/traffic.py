@@ -137,6 +137,6 @@ def check_peer(peer: str) -> None:
     rc, _, _ = run(["ping", "-c", "2", "-W", "2", "-q", peer], timeout=15)
     if rc != 0:
         raise LinkTestError(
-            f"peer {peer} is unreachable. Check that scripts/setup_adhoc.sh ran on both Pis, "
-            f"both joined the same SSID/frequency, and the Pis are within range."
+            f"peer {peer} is unreachable. Check that the mesh is up on both Pis "
+            f"(mesh/bringup/mesh-up.sh, 'batctl n') and the Pis are within range."
         )

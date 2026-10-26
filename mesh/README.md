@@ -23,7 +23,7 @@ Full task list: [technical todo](docs/technical.md#technical-todo).
 | --- | --- |
 | [docs/academic.md](docs/academic.md) | State of the art, gaps, research questions and hypotheses, evaluation design, contributions (C3, C5), venues |
 | [bringup/](bringup/README.md) | BATMAN-adv node setup: readiness check, `mesh-up`/`mesh-down`, installer, systemd unit, shared `mesh.conf` |
-| [harness/adhoc-range/](harness/adhoc-range/README.md) | Two-Pi ad-hoc link range test: iw/iperf3/ping collector, path loss fit, usable range, link budget |
+| [harness/adhoc-range/](harness/adhoc-range/README.md) | Two-Pi mesh link range test: iw/iperf3/ping collector, path loss fit, usable range, link budget |
 | [docs/technical.md](docs/technical.md) | Network architecture, hardware, BATMAN-adv bring-up and tuning, ROS 2 transports, time sync, measurement harness, test procedure |
 
 Planned code folders, added as work starts:

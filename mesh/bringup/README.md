@@ -75,8 +75,8 @@ iperf3 -s   /   iperf3 -c 10.10.0.1      # TCP goodput over bat0
 - **Routing algorithm.** `BATMAN_IV` by default. It is fixed when `bat0` is created, so changing it means `mesh-down` then `mesh-up`, and all nodes must match.
 - **Distributed ARP table** is off, as in the deployed units.
 - **Fixed BSSID** (`02:ca:fe:ca:fe:01`). Units set up with the older hand-made `mesh-up` joined with a random BSSID, so they form a different cell from units using this one. Move all units to these scripts together.
-- **NetworkManager.** Only the mesh interface is set to unmanaged; other links (Ethernet, USB tether) stay up. This differs from the [adhoc-range](../harness/adhoc-range/README.md) scripts, which stop NetworkManager entirely.
-- The IBSS interface cannot be shared with the [adhoc-range](../harness/adhoc-range/README.md) test: run `mesh-down` before its `setup_adhoc.sh`, and its teardown before `mesh-up`.
+- **NetworkManager.** Only the mesh interface is set to unmanaged; other links (Ethernet, USB tether) stay up.
+- The [adhoc-range](../harness/adhoc-range/README.md) test runs on the mesh this script brings up; it does not touch the radio.
 
 ## Known limitations
 

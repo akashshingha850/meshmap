@@ -17,7 +17,7 @@ from .common import LinkTestError
 DEFAULT_CONFIG = Path(__file__).resolve().parent.parent / "config.yaml"
 
 _REQUIRED = [
-    "interface", "ssid", "frequency_mhz", "ips.pi1", "ips.pi2", "prefix_len",
+    "interface", "frequency_mhz", "ips.pi1", "ips.pi2",
     "test.distances_m", "test.settle_s", "test.duration_s", "test.ping_interval_s",
     "iperf.port", "iperf.udp_bitrate", "output_dir",
     "analysis.throughput_fraction", "analysis.loss_threshold_pct",
