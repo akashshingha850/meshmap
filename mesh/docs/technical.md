@@ -25,7 +25,7 @@ flowchart LR
     BAT1 <-. direct when in range .-> BATG
 ```
 
-- **Layer 2:** BATMAN-adv makes every node look like it sits on one Ethernet segment (`bat0`). IP addressing is static per node: `10.42.0.<node-id>/24`.
+- **Layer 2:** BATMAN-adv makes every node look like it sits on one Ethernet segment (`bat0`). IP addressing is static per node: `10.10.0.<node-id>/24`.
 - **Camera link:** the A8 mini sits on the Pi's `eth0` in its own subnet (`192.168.144.0/24`). Never add `eth0` to `bat0` and never forward between the two: the camera's RTSP stream would flood the mesh. Images cross the mesh only through the P3 scheduler.
 - **Flight controller:** the Pixracer's PX4 build (`px4_fmu-v4`) has the uXRCE-DDS client disabled (`CONFIG_MODULES_UXRCE_DDS_CLIENT=n` in [default.px4board](https://github.com/PX4/PX4-Autopilot/blob/main/boards/px4/fmu-v4/default.px4board)), so MAVROS is the only ROS 2 path from the FC. That makes MAVROS-vs-uXRCE-DDS comparisons out of scope on this airframe.
 - **ROS 2:** DDS stays on each host (`ROS_AUTOMATIC_DISCOVERY_RANGE=LOCALHOST`). Only allow-listed topics cross the mesh through zenoh-bridge-ros2dds, as the zenoh-plugin-ros2dds README advises.
@@ -45,6 +45,8 @@ flowchart LR
 
 ## Mesh bring-up (BATMAN-adv over IBSS)
 
+Use the scripts in [bringup/](../bringup/README.md) (`check-node.sh`, `install.sh`, `mesh-up.sh`); the commands below show what they do. Deployed settings are SSID `mesh-net`, 5180 MHz (indoor-only in Finland), `10.10.0.<node-id>/24`, where the node id is the number at the end of the hostname.
+
 ```bash
 # one-time
 sudo apt install batctl iw gpsd chrony iperf3
@@ -61,7 +63,7 @@ sudo ip link set $IF up
 sudo iw dev $IF ibss join $MESH $FREQ HT20 fixed-freq $BSSID
 sudo batctl meshif bat0 interface add $IF   # older batctl: batctl if add $IF
 sudo ip link set bat0 up
-sudo ip addr add 10.42.0.${NODE_ID}/24 dev bat0
+sudo ip addr add 10.10.0.${NODE_ID}/24 dev bat0
 ```
 
 ### Underlay variant: 802.11s mesh point with forwarding off
@@ -97,7 +99,7 @@ Before campaign A, check every default against open-mesh.org and `batctl -h` for
 | rmw_zenoh | `RMW_IMPLEMENTATION=rmw_zenoh_cpp`; one `rmw_zenohd` router per host, peers connected over `bat0` |
 | zenoh-bridge-ros2dds | Local DDS on each host + bridge with `allow` list (below) |
 | Tuned CycloneDDS | `CYCLONEDDS_URI` with `MaxMessageSize` ≈ 1400 B, unicast peer list, multicast off |
-| Fast DDS Discovery Server | `ROS_DISCOVERY_SERVER=10.42.0.1:11811` on the ground server |
+| Fast DDS Discovery Server | `ROS_DISCOVERY_SERVER=10.10.0.1:11811` on the ground server |
 
 ```json5
 // zenoh-bridge-ros2dds config (UAV side), allow-list only what crosses the mesh
@@ -111,7 +113,7 @@ Before campaign A, check every default against open-mesh.org and `batctl -h` for
     },
   }},
   mode: "peer",
-  connect: { endpoints: ["tcp/10.42.0.1:7447"] },
+  connect: { endpoints: ["tcp/10.10.0.1:7447"] },
 }
 ```
 
@@ -128,7 +130,7 @@ dtoverlay=pps-gpio,gpiopin=18
 # /etc/chrony/chrony.conf
 refclock SHM 0 refid NMEA offset 0.2 delay 0.2 noselect
 refclock PPS /dev/pps0 refid PPS lock NMEA prefer
-allow 10.42.0.0/24
+allow 10.10.0.0/24
 ```
 
 Log `chronyc tracking` once a second on every node. The offset between nodes is a measured outcome (RQ1 / RQ4), not an assumption.
@@ -144,6 +146,8 @@ Log `chronyc tracking` once a second on every node. The offset between nodes is 
 | Discovery bytes | `tcpdump -i bat0` on every hop, filtered on RTPS/Zenoh ports | Bytes per hop |
 | Radio | `iw dev <if> station dump` (RSSI, tx bitrate, retries) at 1 Hz | CSV |
 
+The two-node range and signal-quality test (step 2 of the procedure below) is implemented in [harness/adhoc-range](../harness/adhoc-range/README.md); it uses 2.4 GHz and `192.168.50.0/24` on the bare IBSS interface, so tear it down before the BATMAN-adv bring-up.
+
 Log everything with GNSS-disciplined timestamps under `runs/<date>/<run-id>/<node>/`.
 
 ## Ground test procedure (before flights)
@@ -157,10 +161,11 @@ Log everything with GNSS-disciplined timestamps under `runs/<date>/<run-id>/<nod
 ## Technical todo
 
 - [ ] Choose and buy radios (option B first); confirm IBSS + mesh point with `iw list`
-- [ ] Write `mesh-up.sh` / systemd unit; Ansible role for all nodes
+- [x] Write `mesh-up.sh` / systemd unit (`bringup/`, checked on pi1 only, `mesh-up` not re-run since). [ ] Ansible role for all nodes
 - [ ] gpsd + PPS + chrony on every node; log offsets
 - [ ] zenoh-bridge config + QoS profiles; tuned CycloneDDS XML; Discovery Server launch
 - [ ] Measurement harness scripts (probe, route logger, station dump, tcpdump rotation)
+- [ ] Run `harness/adhoc-range` on two Pis (onboard brcmfmac first): confirm IBSS, HT and noise-floor behaviour, record the path loss exponent
 - [ ] Bench and walk tests; first link-capacity table
 - [ ] Flight campaign A runbook and checklist
 - [ ] Export link-capacity model (goodput vs hops, distance, altitude) as a JSON/CSV file for P2 and P3

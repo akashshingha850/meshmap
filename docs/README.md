@@ -40,6 +40,8 @@ flowchart LR
 Shared between pipelines:
 
 - [Interfaces](../integration/interfaces/README.md): [link-capacity model](../integration/interfaces/link-model.md) · [live goodput](../integration/interfaces/goodput.md) · [mission plan](../integration/interfaces/mission-plan.md) · [image record](../integration/interfaces/image-record.md) · [coverage holes](../integration/interfaces/coverage-holes.md) · [run metadata](../integration/interfaces/run-metadata.md)
+- [BATMAN-adv node setup](../mesh/bringup/README.md): check, install and bring up a mesh unit (mesh)
+- [Ad-hoc link range test](../mesh/harness/adhoc-range/README.md): two-Pi IBSS range and signal-quality tool (mesh)
 - [Decision records](../integration/decisions/README.md)
 - [How we work together](../CONTRIBUTING.md)
 - [Claude skills](claude-skills.md): planned Claude Code skills for this repo, where they live and who owns them

@@ -1,0 +1,13 @@
+[Unit]
+Description=batman-adv ad-hoc mesh
+After=NetworkManager.service
+Wants=NetworkManager.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/mesh-up
+ExecStop=/usr/local/sbin/mesh-down
+
+[Install]
+WantedBy=multi-user.target

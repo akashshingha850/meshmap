@@ -22,15 +22,17 @@ Full task list: [technical todo](docs/technical.md#technical-todo).
 | Path | Contents |
 | --- | --- |
 | [docs/academic.md](docs/academic.md) | State of the art, gaps, research questions and hypotheses, evaluation design, contributions (C3, C5), venues |
+| [bringup/](bringup/README.md) | BATMAN-adv node setup: readiness check, `mesh-up`/`mesh-down`, installer, systemd unit, shared `mesh.conf` |
+| [harness/adhoc-range/](harness/adhoc-range/README.md) | Two-Pi ad-hoc link range test: iw/iperf3/ping collector, path loss fit, usable range, link budget |
 | [docs/technical.md](docs/technical.md) | Network architecture, hardware, BATMAN-adv bring-up and tuning, ROS 2 transports, time sync, measurement harness, test procedure |
 
 Planned code folders, added as work starts:
 
 ```
-bringup/      # mesh-up.sh, systemd units, Ansible role for all nodes
+bringup/      # done: scripts, systemd unit; Ansible role to come
 transport/    # zenoh-bridge config + QoS, CycloneDDS XML, Discovery Server launch
 timesync/     # gpsd + PPS + chrony configs
-harness/      # probe, route logger, station dump, tcpdump rotation
+harness/      # adhoc-range/ (done, untested on hardware); probe, route logger, tcpdump rotation to come
 model/        # builds link_model.json from harness logs
-tests/
+tests/        # shared tests; adhoc-range keeps its own in harness/adhoc-range/tests
 ```
